@@ -12,7 +12,7 @@ cache:
     - node_modules
 
 pre:
-  - npm ci
+  - npm install
   - npx playwright install --with-deps chromium
 
 test:
