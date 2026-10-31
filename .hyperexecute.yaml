@@ -1,31 +1,34 @@
-version: "0.2"
+---
+version: "0.1"
+globalTimeout: 90
+testSuiteTimeout: 90
+testSuiteStep: 90
+
 runson: linux
-
-# Configure LT_USERNAME and LT_ACCESS_KEY as encrypted HyperExecute secrets.
-# Confirm the supported browser/OS matrix in your HyperExecute account before expanding it.
 autosplit: true
+retryOnFailure: false
+maxRetries: 1
 concurrency: 2
-
-cache:
-  enabled: true
-  paths:
-    - node_modules
 
 pre:
   - npm install
   - npx playwright install --with-deps chromium
 
-test:
-  - npm test
+testDiscovery:
+  type: raw
+  mode: remote
+  command: grep -nri 'describe' tests | sed 's/:test.*//'
 
-mergeArtifacts: true
+testRunnerCommand: npx playwright test $test
+
+report: true
+partialReports:
+  frameworkName: playwright
+  location: playwright-report
+  type: HTML
+
 uploadArtefacts:
-  - name: playwright-report
+  - name: PlaywrightArtifacts
     path:
       - playwright-report/**
-  - name: test-results
-    path:
       - test-results/**
-
-post:
-  - echo "Playwright 102 execution finished. Review the uploaded artifacts."
