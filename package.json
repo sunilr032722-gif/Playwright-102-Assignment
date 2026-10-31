@@ -1,0 +1,15 @@
+{
+  "name": "playwright-102-assignment",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Playwright 102 assignment - Selenium Playground scenarios",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "dotenv": "^16.4.7"
+  }
+}
