@@ -1,0 +1,44 @@
+---
+version: "0.1"
+globalTimeout: 90
+testSuiteTimeout: 60
+testSuiteStep: 60
+
+runson: linux
+autosplit: true
+retryOnFailure: false
+concurrency: 2
+
+env:
+  BASE_URL: https://www.lambdatest.com/selenium-playground
+
+pre:
+  - npm install --no-audit --no-fund
+  - npx playwright install --with-deps chromium
+
+testDiscovery:
+  type: raw
+  mode: remote
+  command: find tests -maxdepth 1 -type f -name '*.spec.js' | sort
+
+testRunnerCommand: npx playwright test $test --project=chromium
+
+report: true
+partialReports:
+  frameworkName: playwright
+  location: playwright-report
+  type: html
+
+uploadArtefacts:
+  - name: PlaywrightReports
+    path:
+      - playwright-report/**
+      - test-results/**
+
+post:
+  - echo "Playwright 102 test execution completed"
+alwaysRunPostSteps: true
+
+jobLabel:
+  - playwright-102
+  - javascript
