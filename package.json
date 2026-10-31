@@ -1,11 +1,15 @@
 {
   "name": "playwright-102-assignment",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "Playwright 102 assignment - Selenium Playground scenarios",
+  "description": "Independent Playwright 102 assignment using page objects and scenario-based tests",
   "scripts": {
     "test": "playwright test",
+    "test:local": "playwright test --project=chromium",
     "test:headed": "playwright test --headed",
+    "test:simple-form": "playwright test tests/simple-form.spec.js",
+    "test:slider": "playwright test tests/slider.spec.js",
+    "test:input-form": "playwright test tests/input-form.spec.js",
     "test:report": "playwright show-report"
   },
   "devDependencies": {
