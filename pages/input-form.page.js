@@ -4,30 +4,37 @@ const { BasePage } = require('./base.page');
 class InputFormPage extends BasePage {
   constructor(page) {
     super(page);
-    this.form = page.locator('form').filter({ has: page.locator('input[name="name"]') });
-    this.name = this.form.locator('input[name="name"]');
-    this.email = this.form.locator('input[name="email"]');
-    this.password = this.form.locator('input[name="password"]');
-    this.company = this.form.locator('input[name="company"]');
-    this.website = this.form.locator('input[name="website"]');
+    this.form = page.locator('#seleniumform');
+    this.name = this.form.locator('#name');
+    this.email = this.form.locator('#inputEmail4');
+    this.password = this.form.locator('#inputPassword4');
+    this.company = this.form.locator('#company');
+    this.website = this.form.locator('#websitename');
     this.country = this.form.locator('select[name="country"]');
-    this.city = this.form.locator('input[name="city"]');
-    this.address = this.form.locator('input[name="address_line1"]');
-    this.address2 = this.form.locator('input[name="address_line2"]');
+    this.city = this.form.locator('#inputCity');
+    this.address = this.form.locator('#inputAddress1');
+    this.address2 = this.form.locator('#inputAddress2');
     this.state = this.form.locator('#inputState');
-    this.zip = this.form.locator('input[name="zip"]');
+    this.zip = this.form.locator('#inputZip');
     this.submitButton = this.form.getByRole('button', { name: /^submit$/i });
-    this.successMessage = page.getByText(/thanks for contacting us/i);
+    this.successMessage = page.locator('.loginform .success-msg');
   }
 
   async open() {
     await super.open('input-form-demo/');
+    await expect(this.form).toBeVisible();
     await expect(this.submitButton).toBeVisible();
   }
 
   async submitEmptyForm() {
     await this.submitButton.click();
-    return this.name.evaluate(element => element.validationMessage);
+    const validation = await this.name.evaluate(element => ({
+      valid: element.checkValidity(),
+      message: element.validationMessage
+    }));
+
+    expect(validation.valid).toBe(false);
+    return validation.message;
   }
 
   async fillForm(data) {
@@ -45,11 +52,15 @@ class InputFormPage extends BasePage {
   }
 
   async submitForm() {
+    await expect.poll(() => this.form.evaluate(form => form.checkValidity())).toBe(true);
     await this.submitButton.click();
   }
 
   async expectSuccessfulSubmission() {
-    await expect(this.successMessage).toBeVisible();
+    await expect(this.successMessage).toHaveText('Thanks for contacting us, we will get back to you shortly.', {
+      timeout: 15000
+    });
+    await expect(this.form).toBeHidden();
   }
 }
 module.exports = { InputFormPage };
