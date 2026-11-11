@@ -5,7 +5,7 @@ class SimpleFormPage extends BasePage {
   constructor(page) {
     super(page);
     this.messageInput = page.locator('input#user-message');
-    this.submitButton = page.getByRole('button', { name: /get checked value/i });
+    this.submitButton = page.locator('#showInput');
     this.output = page.locator('p#message');
   }
 
@@ -15,7 +15,8 @@ class SimpleFormPage extends BasePage {
   }
 
   async submitMessage(message) {
-    await this.messageInput.pressSequentially(message);
+    await this.messageInput.fill(message);
+    await expect(this.messageInput).toHaveValue(message);
     await this.submitButton.click();
   }
 

@@ -6,6 +6,7 @@ test.describe('Drag and Drop Range Slider', () => {
     const sliders = new SlidersPage(page);
 
     await sliders.open();
+  await sliders.expectValue(15);
     await sliders.setValue(95);
     await sliders.expectValue(95);
   });
