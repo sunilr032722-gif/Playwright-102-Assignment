@@ -4,24 +4,24 @@ const { BasePage } = require('./base.page');
 class InputFormPage extends BasePage {
   constructor(page) {
     super(page);
-    this.form = page.locator('form').first();
-    this.name = page.locator('input[name="name"]');
-    this.email = page.locator('input[name="email"]');
-    this.password = page.locator('input[name="password"]');
-    this.company = page.locator('input[name="company"]');
-    this.website = page.locator('input[name="website"]');
-    this.country = page.locator('select[name="country"]');
-    this.city = page.locator('input[name="city"]');
-    this.address = page.locator('input[name="address"]');
-    this.address2 = page.locator('input[name="address2"]');
-    this.state = page.locator('input[name="state"]');
-    this.zip = page.locator('input[name="zip"]');
-    this.submitButton = page.getByRole('button', { name: /^submit$/i });
-    this.successMessage = page.getByText(/thank you for contacting us/i);
+    this.form = page.locator('form').filter({ has: page.locator('input[name="name"]') });
+    this.name = this.form.locator('input[name="name"]');
+    this.email = this.form.locator('input[name="email"]');
+    this.password = this.form.locator('input[name="password"]');
+    this.company = this.form.locator('input[name="company"]');
+    this.website = this.form.locator('input[name="website"]');
+    this.country = this.form.locator('select[name="country"]');
+    this.city = this.form.locator('input[name="city"]');
+    this.address = this.form.locator('input[name="address_line1"]');
+    this.address2 = this.form.locator('input[name="address_line2"]');
+    this.state = this.form.locator('#inputState');
+    this.zip = this.form.locator('input[name="zip"]');
+    this.submitButton = this.form.getByRole('button', { name: /^submit$/i });
+    this.successMessage = page.getByText(/thanks for contacting us/i);
   }
 
   async open() {
-    await super.open('/input-form-submit');
+    await super.open('input-form-demo/');
     await expect(this.submitButton).toBeVisible();
   }
 

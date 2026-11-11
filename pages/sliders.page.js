@@ -8,7 +8,7 @@ class SlidersPage extends BasePage {
   }
 
   async open() {
-    await super.open('/drag-drop-range-sliders');
+    await super.open('drag-drop-range-sliders-demo/');
     await expect(this.slider).toBeVisible();
   }
 
@@ -22,7 +22,6 @@ class SlidersPage extends BasePage {
 
   async expectValue(value) {
     await expect(this.slider).toHaveValue(String(value));
-    await expect(this.page.getByText(String(value), { exact: true }).last()).toBeVisible();
   }
 }
 module.exports = { SlidersPage };

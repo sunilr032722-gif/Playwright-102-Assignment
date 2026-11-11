@@ -14,7 +14,7 @@ module.exports = defineConfig({
     ['junit', { outputFile: 'test-results/junit.xml' }]
   ],
   use: {
-    baseURL: process.env.BASE_URL || 'https://www.lambdatest.com/selenium-playground',
+    baseURL: process.env.BASE_URL || 'https://www.testmuai.com/selenium-playground/',
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
