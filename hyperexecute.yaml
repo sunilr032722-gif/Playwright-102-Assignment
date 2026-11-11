@@ -8,12 +8,15 @@ runson: linux
 autosplit: true
 retryOnFailure: false
 concurrency: 2
+runtime:
+  - language: node
+    version: "20"
 
 env:
   BASE_URL: https://www.lambdatest.com/selenium-playground
 
 pre:
-  - npm install --no-audit --no-fund
+  - npm ci --no-audit --no-fund
   - npx playwright install --with-deps chromium
 
 testDiscovery:
