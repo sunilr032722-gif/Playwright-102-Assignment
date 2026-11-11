@@ -17,7 +17,7 @@ env:
 
 pre:
   - npm ci --no-audit --no-fund
-  - npx playwright install --with-deps chromium
+  - npx playwright install chromium
 
 testDiscovery:
   type: raw
