@@ -1,41 +1,36 @@
-name: Playwright Tests
+name: HyperExecute
 
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
-  test:
+  run:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
+      - name: Download HyperExecute CLI
+        shell: bash
+        run: |
+          curl --fail --location --retry 3 \
+            https://downloads.lambdatest.com/hyperexecute/linux/hyperexecute \
+            --output hyperexecute
+          chmod +x hyperexecute
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Install Playwright browser
-        run: npx playwright install --with-deps chromium
-
-      - name: Run Playwright tests
-        run: npm test
-
-      - name: Upload test artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-test-artifacts
-          path: |
-            playwright-report/
-            test-results/
-          if-no-files-found: ignore
-          retention-days: 14
+      - name: Run HyperExecute matrix
+        env:
+          LT_USERNAME: ${{ secrets.LT_USERNAME }}
+          LT_ACCESS_KEY: ${{ secrets.LT_ACCESS_KEY }}
+        run: |
+          test -n "$LT_USERNAME" || { echo "Missing LT_USERNAME repository secret"; exit 1; }
+          test -n "$LT_ACCESS_KEY" || { echo "Missing LT_ACCESS_KEY repository secret"; exit 1; }
+          ./hyperexecute \
+            --user "$LT_USERNAME" \
+            --key "$LT_ACCESS_KEY" \
+            --config hyperexecute.yaml \
+            --download-artifacts-zip
